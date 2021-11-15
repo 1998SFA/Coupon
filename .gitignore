@@ -1,7 +1,7 @@
 *.pyc
 *~
 __pycache__
-myvenv
+config
 db.splite3
 /static
 .DS_Store
