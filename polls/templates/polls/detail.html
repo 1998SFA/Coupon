@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+      .searchBox {
+        margin: 20px 0;
+      }
+
+      .listInner {
+        background-color: #dedede;
+        margin: 10px 5px;
+        padding: 4px;
+        display: none;
+      }
+
+    </style>
+</head>
+
+
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div class="searchBox">
+    <label>공백없이 이름 전화번호 뒷자리: <input type="text" id="search" onkeyup="enterkey()" placeholder="ex.김눈송0308" />
+        <button onclick="filter()">검색</button>
+    </label>
+</div>
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+{% for choice in question.choice_set.all %}
+    <div class="listInner">
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label class="hi" for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    </div>
+{% endfor %}
+<input type="submit" value="사용하기">
+</form>
+
+    <script>
+      function enterkey(){
+        if (window.event.keyCode == 13){
+            filter();
+        }
+      }
+      function filter() {
+        let search = document.getElementById("search").value.toLowerCase();
+        let listInner = document.getElementsByClassName("listInner");
+
+        for (let i = 0; i < listInner.length; i++) {
+          city = listInner[i].getElementsByClassName("hi");
+          if (search.length > 5 && city[0].innerHTML.toLowerCase().indexOf(search) != -1
+          ) {
+            listInner[i].style.display = "flex"
+          } else {
+            listInner[i].style.display = "none"
+          }
+        }
+      }
+
+    </script>
+</html>
